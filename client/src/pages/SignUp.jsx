@@ -59,9 +59,13 @@ function SignUp() {
       await signup(formData.name, formData.email, formData.password);
       navigate('/dashboard');
     } catch (err) {
-      setApiError(
-        err.response?.data?.message || 'Sign up failed. Please try again.'
-      );
+      if (err.response) {
+        setApiError(err.response.data?.message || 'Sign up failed. Please try again.');
+      } else if (err.request) {
+        setApiError('Cannot reach the server. Please check your connection.');
+      } else {
+        setApiError('An unexpected error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

@@ -31,9 +31,13 @@ function Login() {
       await login(formData.email, formData.password);
       navigate('/dashboard');
     } catch (err) {
-      setError(
-        err.response?.data?.message || 'Login failed. Please try again.'
-      );
+      if (err.response) {
+        setError(err.response.data?.message || 'Login failed. Please try again.');
+      } else if (err.request) {
+        setError('Cannot reach the server. Please check your connection.');
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
